@@ -22,9 +22,7 @@ public class OrderDao implements ReadOnlyDao<String, Order> {
      *
      * @param client OrderManipulationAuthorityClient to pass in
      */
-    public OrderDao(OrderManipulationAuthorityClient client) {
-        omaClient = client;
-    }
+    public OrderDao(OrderManipulationAuthorityClient client) {omaClient = client;}
 
     /**
      * Returns an Order object corresponding to the provided orderId. If no order can be

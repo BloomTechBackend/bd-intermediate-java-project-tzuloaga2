@@ -26,6 +26,8 @@ public class PromiseDao implements ReadOnlyDao<String, List<Promise>> {
     public PromiseDao(DeliveryPromiseServiceClient dpsClient, OrderManipulationAuthorityClient omaClient) {
         this.dpsClient = dpsClient;
         this.omaClient = omaClient;
+        //Use the PromiseDao to retrieve the order's shipment dates from OMA, and delivery promises from DPS.
+        //Returns the promises to Shell for display to the user.
     }
 
     /**

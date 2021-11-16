@@ -1,0 +1,49 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+interface ReadOnlyDao
+class PromiseHistoryClient
+getPromiseHistoryByOrderIdActivity(orderId: String)
+
+class GetPromiseHistoryByOrderIdActivity
+get(orderId: String)
+get(CustomerOrderItemId: String)
+
+class OrderDao
+getCustomerOrderByOrderId(orderId: String)
+
+class PromiseDao
+getCustomerOrderItemByOrderItemId(orderItemId: String)
+getCustomerOrderItemByOrder(orderId: String)
+getDeliveryPromiseByOrderItemId((orderItemId: String)
+
+class OrderManipulationAuthorityClient
+
+class DeliveryPromiseServiceClient
+
+class Order
+
+class OrderItem
+
+class Promise
+
+class PromiseHistory
+
+class App
+
+class Shell
+
+PromiseHistoryClient -- GetPromiseHistoryByOrderIdActivity : getPromiseHistoryByOrderId(orderId String)
+GetPromiseHistoryByOrderIdActivity -- OrderDao : get(orderId String)
+OrderDao -- OrderManipulationAuthorityClient : getCustomerOrderByOrderId(orderId String)
+PromiseDao -- OrderManipulationAuthorityClient
+PromiseDao -- DeliveryPromiseServiceClient
+GetPromiseHistoryByOrderIdActivity -- PromiseDao
+PromiseHistory -- Promise
+PromiseHistory -- Order
+Order -- OrderItem
+OrderDao ..|> ReadOnlyDao
+PromiseDao ..|> ReadOnlyDao
+
+
+@enduml

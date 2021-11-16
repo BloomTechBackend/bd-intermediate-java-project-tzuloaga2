@@ -40,6 +40,11 @@ public class GetPromiseHistoryByOrderIdActivity {
         }
 
         Order order = orderDao.get(orderId);
+        //was missing an order
+        if (null == order){
+            return new PromiseHistory(order);}
+
+
 
         List<OrderItem> customerOrderItems = order.getCustomerOrderItemList();
         OrderItem customerOrderItem = null;
