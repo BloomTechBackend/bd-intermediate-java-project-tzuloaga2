@@ -2,12 +2,15 @@ package com.amazon.ata.deliveringonourpromise.dao;
 
 import com.amazon.ata.deliveringonourpromise.App;
 import com.amazon.ata.deliveringonourpromise.deliverypromiseservice.DeliveryPromiseServiceClient;
+import com.amazon.ata.deliveringonourpromise.orderfulfillmentservice.OrderFulfillmentServiceClient;
 import com.amazon.ata.deliveringonourpromise.ordermanipulationauthority.OrderManipulationAuthorityClient;
+import com.amazon.ata.deliveringonourpromise.serviceclientInterface.ServiceClient;
 import com.amazon.ata.deliveringonourpromise.types.Promise;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.security.Provider;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -22,6 +25,9 @@ public class PromiseDaoTest {
 
     private OrderManipulationAuthorityClient omaClient = App.getOrderManipulationAuthorityClient();
     private DeliveryPromiseServiceClient dpsClient = App.getDeliveryPromiseServiceClient();
+    private OrderFulfillmentServiceClient ofsClient = App.getOrderFulfillmentServiceClient();
+
+
 
     // undelivered
     private String shippedOrderId;

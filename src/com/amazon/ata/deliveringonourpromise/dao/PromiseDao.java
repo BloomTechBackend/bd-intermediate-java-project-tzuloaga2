@@ -1,12 +1,16 @@
 package com.amazon.ata.deliveringonourpromise.dao;
 
 import com.amazon.ata.deliveringonourpromise.deliverypromiseservice.DeliveryPromiseServiceClient;
+import com.amazon.ata.deliveringonourpromise.orderfulfillmentservice.OrderFulfillmentServiceClient;
 import com.amazon.ata.deliveringonourpromise.ordermanipulationauthority.OrderManipulationAuthorityClient;
+import com.amazon.ata.deliveringonourpromise.serviceclientInterface.ServiceClient;
 import com.amazon.ata.deliveringonourpromise.types.Promise;
+import com.amazon.ata.orderfulfillmentservice.OrderFulfillmentService;
 import com.amazon.ata.ordermanipulationauthority.OrderResult;
 import com.amazon.ata.ordermanipulationauthority.OrderResultItem;
 import com.amazon.ata.ordermanipulationauthority.OrderShipment;
 
+import java.security.Provider;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,18 +21,32 @@ import java.util.List;
 public class PromiseDao implements ReadOnlyDao<String, List<Promise>> {
     private DeliveryPromiseServiceClient dpsClient;
     private OrderManipulationAuthorityClient omaClient;
+    private OrderFulfillmentServiceClient ofsClient;
+    private List<ServiceClient> serviceClientList= new ArrayList<>();
+
+
+
 
     /**
      * PromiseDao constructor, accepting service clients for DPS and OMA.
      * @param dpsClient DeliveryPromiseServiceClient for DAO to access DPS
      * @param omaClient OrderManipulationAuthorityClient for DAO to access OMA
      */
-    public PromiseDao(DeliveryPromiseServiceClient dpsClient, OrderManipulationAuthorityClient omaClient) {
+
+    public PromiseDao( DeliveryPromiseServiceClient dpsClient, OrderManipulationAuthorityClient omaClient) {
         this.dpsClient = dpsClient;
         this.omaClient = omaClient;
-        //Use the PromiseDao to retrieve the order's shipment dates from OMA, and delivery promises from DPS.
-        //Returns the promises to Shell for display to the user.
+
     }
+    public PromiseDao(OrderManipulationAuthorityClient omaClient, List<ServiceClient> serviceClientList){
+        this.omaClient = omaClient;
+        this.serviceClientList.addAll(serviceClientList);
+    }
+
+    //Use the PromiseDao to retrieve the order's shipment dates from OMA, and delivery promises from DPS.
+        //Returns the promises to Shell for display to the user.
+
+
 
     /**
      * Returns a list of all Promises associated with the given order item ID.
@@ -42,16 +60,32 @@ public class PromiseDao implements ReadOnlyDao<String, List<Promise>> {
 
         List<Promise> promises = new ArrayList<>();
 
+
+
         // fetch Promise from Delivery Promise Service. If exists, add to list of Promises to return.
         // Set delivery date
-        Promise dpsPromise = dpsClient.getDeliveryPromiseByOrderItemId(customerOrderItemId);
-        if (dpsPromise != null) {
-            dpsPromise.setDeliveryDate(itemDeliveryDate);
-            promises.add(dpsPromise);
+        for (ServiceClient client: serviceClientList)
+        {
+            Promise clientpromises = client.getDeliveryPromiseByOrderItemId(customerOrderItemId);
+            if (clientpromises != null){
+                clientpromises.setDeliveryDate(itemDeliveryDate);
+                promises.add(clientpromises);
+            }
         }
+
+
+
+
+//        Promise dpsPromise = dpsClient.getDeliveryPromiseByOrderItemId(customerOrderItemId);
+  //      if (dpsPromise != null) {
+    //        dpsPromise.setDeliveryDate(itemDeliveryDate);
+      //      promises.add(dpsPromise);
+        //}
+
 
         return promises;
     }
+
 
     /*
      * Fetches the delivery date of the shipment containing the order item specified by the given order item ID,

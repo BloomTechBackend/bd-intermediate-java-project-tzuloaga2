@@ -4,6 +4,7 @@ import com.amazon.ata.ordermanipulationauthority.OrderCondition;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -38,6 +39,7 @@ public class Order {
     private List<OrderItem> customerOrderItemList = new ArrayList<>();
     private String shipOption;
     private ZonedDateTime orderDate;
+
 
     private Order() { }
 
@@ -141,7 +143,12 @@ public class Order {
          * @return updated Builder
          */
         public Builder withCustomerOrderItemList(List<OrderItem> customerOrderItemList) {
-            this.customerOrderItemList = customerOrderItemList;
+            List<OrderItem> copy = new ArrayList<>();
+            for (OrderItem item:
+                    customerOrderItemList){
+                copy.add(item);
+            }
+            this.customerOrderItemList = copy;
             return this;
         }
 
