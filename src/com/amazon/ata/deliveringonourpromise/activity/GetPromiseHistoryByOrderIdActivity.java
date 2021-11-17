@@ -53,13 +53,27 @@ public class GetPromiseHistoryByOrderIdActivity {
         }
 
         PromiseHistory history = new PromiseHistory(order);
-        if (customerOrderItem != null) {
-            List<Promise> promises = promiseDao.get(customerOrderItem.getCustomerOrderItemId());
-            for (Promise promise : promises) {
-                promise.setConfidence(customerOrderItem.isConfidenceTracked(), customerOrderItem.getConfidence());
-                history.addPromise(promise);
-            }
+        if (customerOrderItem != null && !customerOrderItems.isEmpty()) {
+            for (OrderItem item : customerOrderItems){
+                if (item != null) {
+                    List<Promise> promises = promiseDao.get(item.getCustomerOrderItemId());
+
+
+
+
+                  //  List<Promise> promises = promiseDao.get(customerOrderItem.getCustomerOrderItemId());
+                    for (Promise promise : promises) {
+                        promise.setConfidence(item.isConfidenceTracked(), item.getConfidence());
+                        history.addPromise(promise);
+
+                    }
+
+                       // promise.setConfidence(customerOrderItem.isConfidenceTracked(), customerOrderItem.getConfidence());
+
+                    }
+                }
         }
+        history.sortOrders();
 
         return history;
     }
