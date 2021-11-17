@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.security.Provider;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -67,8 +68,10 @@ public class PromiseDaoTest {
                                     .getCustomerOrderByOrderId(deliveredOrderId)
                                     .getOrderShipmentList().get(0)
                                     .getDeliveryDate();
-
-        dao = new PromiseDao(dpsClient, omaClient);
+    List <ServiceClient> servicetrying = new ArrayList<>();
+    servicetrying.add(dpsClient);
+    servicetrying.add(ofsClient);
+        dao = new PromiseDao(omaClient, servicetrying);
     }
 
     @Test
